@@ -1,6 +1,9 @@
-﻿//
-// VitroCmd.exe -open "vitro://vitro{40c3836f-e717-489d-b53d-f9a4c56c880f}"
+﻿// Надо в ссылки добавлять 
+// C:\Windows\Microsoft.NET\assembly\GAC_MSIL\Vitro.Client.Interop\v4.0_2019.1.0.1132__7d52b04b90a5a799\Vitro.Client.Interop.dll
 //
+// 10-07-2022 сборка заменена на 2129!
+//
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +17,9 @@ namespace VitroCmd
 {
     internal class Program
     {
+        const string VITRO_VERSION = "2129";
         public static IClient client = null;
-        public const string TEST_URN = @"vitro://vitro{40c3836f-e717-489d-b53d-f9a4c56c880f}";
+        public const string TEST_URN = @"vitro://vitro{d1f47bfb-a228-4711-b092-eb2ab172bbed}";
 
         [STAThread]
         static void Main(string[] args)
@@ -67,11 +71,18 @@ namespace VitroCmd
 
         static string Add(string filePath)
         {
+            if (!(System.IO.File.Exists(filePath)))
+            {
+                throw new Exception($"file not exists {filePath}");
+            }
             Init();
             ILibraryAction libraryAction = client.CreateLibraryAction();
             string localPath = libraryAction.Add(filePath);
             //string s1 = libraryAction.  e(localPath);
-            Console.WriteLine(localPath);
+
+            ILibraryItemUrnAction urnLibraryAction = client.CreateLibraryItemUrnAction();
+            string urn = urnLibraryAction.CreateUrnByPath(localPath);    
+            Console.WriteLine(urn);
             return localPath;
         }
 
@@ -105,13 +116,23 @@ namespace VitroCmd
 
         static void Help()
         {
-            Console.WriteLine("Vitro command line tool by Spectrum (с) ");
-            Console.WriteLine("");
-            Console.WriteLine($"{GetExeFileName()} [-open | -save] \"urn\" ");
-            Console.WriteLine("\t-add добавляет флокальный файл в Vitro и возвращает его имя, urn=путь к добавляемому файлу");
-            Console.WriteLine("\t-open открывает файл из Vitro и возвращает его имя");
-            Console.WriteLine("\t-save сохраняет файл в Vitro и возвращает его имя");
-            Console.WriteLine($"\t urn - URN из Vitro в кавычках, например {TEST_URN}");
+            ColorConsole.WriteWrappedHeader("Vitro command line tool by Spectrum (с) ", headerColor: ConsoleColor.Green);
+            //ColorConsole.WriteEmbeddedColorLine("[yellow]Vitro command line tool by Spectrum (с)[/yellow]");
+            //Console.WriteLine("Vitro command line tool by Spectrum (с) ");
+            Console.WriteLine($"\tдля Витро клиента v{VITRO_VERSION}");
+            Console.WriteLine();
+            ColorConsole.WriteLine($"{GetExeFileName()} [-open |-save |-add] [\"urn\"|\"filename\"] ", ConsoleColor.Yellow);
+            Console.WriteLine();
+            ColorConsole.WritelnColor("\t[yellow]-add[/yellow] добавляет локальный файл в Vitro и возвращает его URN, filename=путь к добавляемому файлу");
+            Console.WriteLine($"\t\t{GetExeFileName()} -add \"" + @"c:\tmp\file.txt" + "\"");
+            ColorConsole.WritelnColor("\t[yellow]-open[/yellow] открывает файл из Vitro и возвращает локальный путь к нему");
+            Console.WriteLine("\t\tВАЖНО - файл становится извлечён в Vitro. Не забудьте вернуть");
+            Console.WriteLine($"\t\t{GetExeFileName()} -open \"{TEST_URN}\"");
+            Console.WriteLine();
+            ColorConsole.WritelnColor("\t[yellow]-save[/yellow] сохраняет файл в Vitro и возвращает локальный путь к нему");
+            Console.WriteLine($"\t\t{GetExeFileName()} -save \"{TEST_URN}\"");
+            Console.WriteLine();
+            Console.WriteLine($"\t urn - URN из Vitro в кавычках, например \"{TEST_URN}\"");
         }
     }
 }
