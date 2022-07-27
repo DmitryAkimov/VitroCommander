@@ -1,8 +1,8 @@
 ﻿// Надо в ссылки добавлять 
-// C:\Windows\Microsoft.NET\assembly\GAC_MSIL\Vitro.Client.Interop\v4.0_2019.1.0.1132__7d52b04b90a5a799\Vitro.Client.Interop.dll
+// C:\Windows\Microsoft.NET\assembly\GAC_MSIL\Vitro.Client.Interop\v4.0_2022.1.0.2146__7d52b04b90a5a799\Vitro.Client.Interop.dll
 //
 // 10-07-2022 сборка заменена на 2129!
-//
+// 27-07-2022 сборка заменена на 2146!
 
 using System;
 using System.Collections.Generic;
