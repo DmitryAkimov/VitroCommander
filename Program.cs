@@ -17,7 +17,7 @@ namespace VitroCmd
 {
     internal class Program
     {
-        const string VITRO_VERSION = "2129";
+        const string VITRO_VERSION = "2146";
         public static IClient client = null;
         public const string TEST_URN = @"vitro://vitro{d1f47bfb-a228-4711-b092-eb2ab172bbed}";
 
